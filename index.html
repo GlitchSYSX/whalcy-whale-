@@ -1,1 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Whalcy Whale | 888 NFT Collection</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;700;900&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ocean: #0a1628;
+      --deep: #050d1a;
+      --cyan: #00d4ff;
+      --gold: #ffd700;
+      --gold2: #ffaa00;
+      --white: #f0f8ff;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--deep);
+      color: var(--white);
+      font-family: 'Nunito', sans-serif;
+      overflow-x: hidden;
+    }
+
+    .bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+    .bubble {
+      position: absolute; bottom: -60px; border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(0,212,255,0.25), rgba(26,111,212,0.05));
+      border: 1px solid rgba(0,212,255,0.1);
+      animation: rise linear infinite;
+    }
+    @keyframes rise {
+      0%   { transform: translateY(0); opacity: .5; }
+      100% { transform: translateY(-110vh); opacity: 0; }
+    }
+
+    #hero {
+      position: relative; min-height: 40vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      text-align: center; padding: 2rem 1rem;
+      background: radial-gradient(ellipse at 50% 80%, #0d2f6e 0%, #050d1a 70%);
+      overflow: hidden;
+    }
+    .ocean-waves {
+      position: absolute; bottom: 0; left: 0; right: 0; height: 100px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 120'%3E%3Cpath fill='%230a1628' d='M0,60 C240,120 480,0 720,60 C960,120 1200,0 1440,60 L1440,120 L0,120 Z'/%3E%3C/svg%3E") repeat-x bottom;
+      animation: waveMove 6s ease-in-out infinite alternate;
+    }
+    @keyframes waveMove { from { background-position-x: 0; } to { background-position-x: 200px; } }
+
+    .hero-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2.5rem, 10vw, 5rem);
+      letter-spacing: .1em;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--cyan) 60%, var(--gold2) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      animation: fadeIn .6s ease both;
+      position: relative; z-index: 2;
+    }
+    .hero-sub {
+      font-size: clamp(.9rem, 2vw, 1.1rem);
+      color: rgba(240,248,255,.6);
+      max-width: 500px;
+      animation: fadeIn .6s .15s both;
+      position: relative; z-index: 2;
+    }
+    .hero-badges {
+      display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center;
+      margin: 1.2rem 0;
+      animation: fadeIn .6s .25s both;
+      position: relative; z-index: 2;
+    }
+    .badge {
+      padding: .35rem 1rem; border-radius: 999px;
+      font-weight: 700; font-size: .8rem; border: 2px solid;
+      letter-spacing: .05em;
+    }
+    .badge-gold { border-color: var(--gold);  color: var(--gold);  background: rgba(255,215,0,.08); }
+    .badge-cyan { border-color: var(--cyan);  color: var(--cyan);  background: rgba(0,212,255,.08); }
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000; font-family: 'Bangers', cursive;
+      font-size: 1.2rem; letter-spacing: .1em;
+      padding: .75rem 2.2rem; border-radius: 999px;
+      text-decoration: none; border: none; cursor: pointer;
+      box-shadow: 0 4px 25px rgba(255,215,0,.35);
+      transition: transform .2s, box-shadow .2s;
+      animation: fadeIn .6s .35s both;
+      position: relative; z-index: 2;
+    }
+    .cta-btn:hover { transform: scale(1.05) translateY(-2px); box-shadow: 0 8px 45px rgba(255,215,0,.5); }
+
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    #collection {
+      padding: 4rem 1.5rem;
+      max-width: 1400px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .section-title {
+      font-family: 'Bangers', cursive;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      letter-spacing: .1em; text-align: center;
+      margin-bottom: 2rem;
+    }
+    .section-title span { color: var(--cyan); }
+
+    .nft-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+      gap: 10px;
+    }
+
+    .nft-card {
+      border-radius: 10px;
+      overflow: hidden;
+      border: 2px solid rgba(0,212,255,.1);
+      cursor: pointer;
+      transition: transform .2s, box-shadow .2s, border-color .2s;
+      animation: popIn .4s ease both;
+      position: relative;
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(.82) translateY(15px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+    .nft-card:hover {
+      transform: translateY(-4px) scale(1.02);
+      box-shadow: 0 10px 30px rgba(0,212,255,.2);
+      border-color: var(--cyan);
+    }
+
+    .card-bg {
+      width: 100%;
+      aspect-ratio: 1;
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: .4rem;
+      position: relative;
+    }
+    .card-bg::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 40%, rgba(0,0,0,0.3));
+      pointer-events: none;
+    }
+    .card-label {
+      padding: .3rem .5rem;
+      font-family: 'Bangers', cursive;
+      font-size: .75rem; letter-spacing: .04em;
+      color: var(--white);
+      text-align: center;
+      background: rgba(0,0,0,.5);
+      border-radius: 6px;
+      position: relative; z-index: 1;
+    }
+
+    #modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.85); z-index: 200;
+      align-items: center; justify-content: center; padding: 1rem;
+    }
+    #modal-overlay.open { display: flex; }
+    #modal {
+      background: #0d2240; border-radius: 20px;
+      border: 2px solid rgba(0,212,255,.3);
+      max-width: 360px; width: 100%; padding: 1.3rem;
+      position: relative; box-shadow: 0 0 50px rgba(0,212,255,.2);
+      animation: modalIn .3s ease both;
+    }
+    @keyframes modalIn { from { opacity: 0; transform: scale(.88) translateY(15px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+    #modal-close {
+      position: absolute; top: .8rem; right: 1rem;
+      background: none; border: none; color: rgba(240,248,255,.5);
+      font-size: 1.6rem; cursor: pointer; line-height: 1;
+    }
+    #modal-close:hover { color: var(--cyan); }
+    #modal-img {
+      width: 100%; aspect-ratio: 1; border-radius: 14px; margin-bottom: .9rem;
+      background-size: cover;
+      background-position: center;
+    }
+    #modal-name {
+      font-family: 'Bangers', cursive; font-size: 1.6rem;
+      letter-spacing: .08em; color: var(--gold); margin-bottom: .8rem;
+    }
+    #modal-opensea {
+      display: block; text-align: center;
+      background: linear-gradient(135deg, var(--gold), var(--gold2));
+      color: #000; font-family: 'Bangers', cursive;
+      font-size: 1.1rem; letter-spacing: .1em;
+      padding: .65rem 1.8rem; border-radius: 999px;
+      text-decoration: none; transition: transform .2s, box-shadow .2s;
+    }
+    #modal-opensea:hover { transform: scale(1.04); box-shadow: 0 6px 25px rgba(255,215,0,.35); }
+
+    footer {
+      text-align: center; padding: 2.5rem 1rem 1.8rem;
+      border-top: 1px solid rgba(0,212,255,.08);
+      color: rgba(240,248,255,.3); font-size: .8rem;
+      position: relative; z-index: 1;
+    }
+    footer a { color: var(--cyan); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<section id="hero">
+  <h1 class="hero-title">🐳 WHALCY WHALE</h1>
+  <p class="hero-sub">888 uniquely dripped whale NFTs 👑</p>
+  <div class="hero-badges">
+    <span class="badge badge-gold">👑 888 Whales</span>
+    <span class="badge badge-cyan">🌊 NFT Collection</span>
+  </div>
+  <a class="cta-btn" href="https://opensea.io/collection/whalcy-whale" target="_blank">View on OpenSea</a>
+  <div class="ocean-waves"></div>
+</section>
+
+<section id="collection">
+  <h2 class="section-title">The <span>Collection</span></h2>
+  <div class="nft-grid" id="grid"></div>
+</section>
+
+<div id="modal-overlay">
+  <div id="modal">
+    <button id="modal-close">✕</button>
+    <div id="modal-img"></div>
+    <div id="modal-name"></div>
+    <a id="modal-opensea" href="https://opensea.io/collection/whalcy-whale" target="_blank">🐳 View on OpenSea</a>
+  </div>
+</div>
+
+<footer>
+  © 2025 <strong>Whalcy Whale 888</strong> NFT Collection &nbsp;·&nbsp;
+  <a href="https://opensea.io/collection/whalcy-whale" target="_blank">OpenSea</a>
+</footer>
+
+<script>
+const TOTAL = 888;
+const NAMES = ["Pirate King","Captain Queen","DJ Lord","Astronaut Lady","Green Prince","Crown Duke","Shades Earl","Beanie Baron","Headband Knight","Ninja Sage","Pink Wizard","Samurai Mage","Dark Rogue","Blue Ranger","Party Paladin","Purple Monk","Bandana Bard","Biker Cleric","Rasta Druid","Ghost Monk","Gold Beast","Galaxy Demon","Sunglasses Angel","Anchor Ghost","Festival Spirit","Ocean Soul","Tropical Heart","Night Mind","Red Force","Orange Power","Yellow Strength","Green Wisdom","Cyan Grace","Magenta Beauty","Silver Justice","Bronze Truth","Pearl Light","Diamond Dark","Emerald Balance","Ruby Harmony","Sapphire Peace","Jade King","Marble Queen","Crystal Lord","Thunder Lady","Lightning Prince","Storm Duke","Frost Earl","Fire Baron","Shadow Knight","Eclipse Sage","Nebula Wizard","Cosmic Mage","Solar Rogue","Lunar Ranger","Royal Paladin","Noble Monk","Mystic Bard","Magic Cleric","Enchanted Druid","Blessed Monk","Sacred Beast","Ancient Demon","Classic Angel","Modern Ghost","Future Spirit","Pirate Soul","Captain Heart","DJ Mind","Astronaut Force","Green Power","Crown Strength","Shades Wisdom","Beanie Grace","Headband Beauty","Ninja Justice","Pink Truth","Samurai Light","Dark Dark","Blue Balance","Party Harmony","Purple Peace","Bandana King","Biker Queen","Rasta Lord","Ghost Lady","Gold Prince","Galaxy Duke","Sunglasses Earl","Anchor Baron","Festival Knight","Ocean Sage","Tropical Wizard","Night Mage","Red Rogue","Orange Ranger","Yellow Paladin","Green Monk","Cyan Bard","Magenta Cleric","Silver Druid","Bronze Monk","Pearl Beast","Diamond Demon","Emerald Angel","Ruby Ghost","Sapphire Spirit","Jade Soul","Marble Heart","Crystal Mind","Thunder Force","Lightning Power","Storm Strength","Frost Wisdom","Fire Grace","Shadow Beauty","Eclipse Justice","Nebula Truth","Cosmic Light","Solar Dark","Lunar Balance","Royal Harmony","Noble Peace","Mystic King","Magic Queen","Enchanted Lord","Blessed Lady","Sacred Prince","Ancient Duke","Classic Earl","Modern Baron","Future Knight","Pirate Sage","Captain Wizard","DJ Mage","Astronaut Rogue","Green Ranger","Crown Paladin","Shades Monk","Beanie Bard","Headband Cleric","Ninja Druid","Pink Monk","Samurai Beast","Dark Demon","Blue Angel","Party Ghost","Purple Spirit","Bandana Soul","Biker Heart","Rasta Mind","Ghost Force","Gold Power","Galaxy Strength","Sunglasses Wisdom","Anchor Grace","Festival Beauty","Ocean Justice","Tropical Truth","Night Light","Red Dark","Orange Balance","Yellow Harmony","Green Peace","Cyan King","Magenta Queen","Silver Lord","Bronze Lady","Pearl Prince","Diamond Duke","Emerald Earl","Ruby Baron","Sapphire Knight","Jade Sage","Marble Wizard","Crystal Mage","Thunder Rogue","Lightning Ranger","Storm Paladin","Frost Monk","Fire Bard","Shadow Cleric","Eclipse Druid","Nebula Monk","Cosmic Beast","Solar Demon","Lunar Angel","Royal Ghost","Noble Spirit","Mystic Soul","Magic Heart","Enchanted Mind","Blessed Force","Sacred Power","Ancient Strength","Classic Wisdom","Modern Grace","Future Beauty","Pirate Justice","Captain Truth","DJ Light","Astronaut Dark","Green Balance","Crown Harmony","Shades Peace","Beanie King","Headband Queen","Ninja Lord","Pink Lady","Samurai Prince","Dark Duke","Blue Earl","Party Baron","Purple Knight","Bandana Sage","Biker Wizard","Rasta Mage","Ghost Rogue","Gold Ranger","Galaxy Paladin","Sunglasses Monk","Anchor Bard","Festival Cleric","Ocean Druid","Tropical Monk","Night Beast","Red Demon","Orange Angel","Yellow Ghost","Green Spirit","Cyan Soul","Magenta Heart","Silver Mind","Bronze Force","Pearl Power","Diamond Strength","Emerald Wisdom","Ruby Grace","Sapphire Beauty","Jade Justice","Marble Truth","Crystal Light","Thunder Dark","Lightning Balance","Storm Harmony","Frost Peace","Fire King","Shadow Queen","Eclipse Lord","Nebula Lady","Cosmic Prince","Solar Duke","Lunar Earl","Royal Baron","Noble Knight","Mystic Sage","Magic Wizard","Enchanted Mage","Blessed Rogue","Sacred Ranger","Ancient Paladin","Classic Monk","Modern Bard","Future Cleric","Pirate Druid","Captain Monk","DJ Beast","Astronaut Demon","Green Angel","Crown Ghost","Shades Spirit","Beanie Soul","Headband Heart","Ninja Mind","Pink Force","Samurai Power","Dark Strength","Blue Wisdom","Party Grace","Purple Beauty","Bandana Justice","Biker Truth","Rasta Light","Ghost Dark","Gold Balance","Galaxy Harmony","Sunglasses Peace","Anchor King","Festival Queen","Ocean Lord","Tropical Lady","Night Prince","Red Duke","Orange Earl","Yellow Baron","Green Knight","Cyan Sage","Magenta Wizard","Silver Mage","Bronze Rogue","Pearl Ranger","Diamond Paladin","Emerald Monk","Ruby Bard","Sapphire Cleric","Jade Druid","Marble Monk","Crystal Beast","Thunder Demon","Lightning Angel","Storm Ghost","Frost Spirit","Fire Soul","Shadow Heart","Eclipse Mind","Nebula Force","Cosmic Power","Solar Strength","Lunar Wisdom","Royal Grace","Noble Beauty","Mystic Justice","Magic Truth","Enchanted Light","Blessed Dark","Sacred Balance","Ancient Harmony","Classic Peace","Modern King","Future Queen","Pirate Lord","Captain Lady","DJ Prince","Astronaut Duke","Green Earl","Crown Baron","Shades Knight","Beanie Sage","Headband Wizard","Ninja Mage","Pink Rogue","Samurai Ranger","Dark Paladin","Blue Monk","Party Bard","Purple Cleric","Bandana Druid","Biker Monk","Rasta Beast","Ghost Demon","Gold Angel","Galaxy Ghost","Sunglasses Spirit","Anchor Soul","Festival Heart","Ocean Mind","Tropical Force","Night Power","Red Strength","Orange Wisdom","Yellow Grace","Green Beauty","Cyan Justice","Magenta Truth","Silver Light","Bronze Dark","Pearl Balance","Diamond Harmony","Emerald Peace","Ruby King","Sapphire Queen","Jade Lord","Marble Lady","Crystal Prince","Thunder Duke","Lightning Earl","Storm Baron","Frost Knight","Fire Sage","Shadow Wizard","Eclipse Mage","Nebula Rogue","Cosmic Ranger","Solar Paladin","Lunar Monk","Royal Bard","Noble Cleric","Mystic Druid","Magic Monk","Enchanted Beast","Blessed Demon","Sacred Angel","Ancient Ghost","Classic Spirit","Modern Soul","Future Heart","Pirate Mind","Captain Force","DJ Power","Astronaut Strength","Green Wisdom","Crown Grace","Shades Beauty","Beanie Justice","Headband Truth","Ninja Light","Pink Dark","Samurai Balance","Dark Harmony","Blue Peace","Party King","Purple Queen","Bandana Lord","Biker Lady","Rasta Prince","Ghost Duke","Gold Earl","Galaxy Baron","Sunglasses Knight","Anchor Sage","Festival Wizard","Ocean Mage","Tropical Rogue","Night Ranger","Red Paladin","Orange Monk","Yellow Bard","Green Cleric","Cyan Druid","Magenta Monk","Silver Beast","Bronze Demon","Pearl Angel","Diamond Ghost","Emerald Spirit","Ruby Soul","Sapphire Heart","Jade Mind","Marble Force","Crystal Power","Thunder Strength","Lightning Wisdom","Storm Grace","Frost Beauty","Fire Justice","Shadow Truth","Eclipse Light","Nebula Dark","Cosmic Balance","Solar Harmony","Lunar Peace","Royal King","Noble Queen","Mystic Lord","Magic Lady","Enchanted Prince","Blessed Duke","Sacred Earl","Ancient Baron","Classic Knight","Modern Sage","Future Wizard","Pirate Mage","Captain Rogue","DJ Ranger","Astronaut Paladin","Green Monk","Crown Bard","Shades Cleric","Beanie Druid","Headband Monk","Ninja Beast","Pink Demon","Samurai Angel","Dark Ghost","Blue Spirit","Party Soul","Purple Heart","Bandana Mind","Biker Force","Rasta Power","Ghost Strength","Gold Wisdom","Galaxy Grace","Sunglasses Beauty","Anchor Justice","Festival Truth","Ocean Light","Tropical Dark","Night Balance","Red Harmony","Orange Peace","Yellow King","Green Queen","Cyan Lord","Magenta Lady","Silver Prince","Bronze Duke","Pearl Earl","Diamond Baron","Emerald Knight","Ruby Sage","Sapphire Wizard","Jade Mage","Marble Rogue","Crystal Ranger","Thunder Paladin","Lightning Monk","Storm Bard","Frost Cleric","Fire Druid","Shadow Monk","Eclipse Beast","Nebula Demon","Cosmic Angel","Solar Ghost","Lunar Spirit","Royal Soul","Noble Heart","Mystic Mind","Magic Force","Enchanted Power","Blessed Strength","Sacred Wisdom","Ancient Grace","Classic Beauty","Modern Justice","Future Truth","Pirate Light","Captain Dark","DJ Balance","Astronaut Harmony","Green Peace","Crown King","Shades Queen","Beanie Lord","Headband Lady","Ninja Prince","Pink Duke","Samurai Earl","Dark Baron","Blue Knight","Party Sage","Purple Wizard","Bandana Mage","Biker Rogue","Rasta Ranger","Ghost Paladin","Gold Monk","Galaxy Bard","Sunglasses Cleric","Anchor Druid","Festival Monk","Ocean Beast","Tropical Demon","Night Angel","Red Ghost","Orange Spirit","Yellow Soul","Green Heart","Cyan Mind","Magenta Force","Silver Power","Bronze Strength","Pearl Wisdom","Diamond Grace","Emerald Beauty","Ruby Justice","Sapphire Truth","Jade Light","Marble Dark","Crystal Balance","Thunder Harmony","Lightning Peace","Storm King","Frost Queen","Fire Lord","Shadow Lady","Eclipse Prince","Nebula Duke","Cosmic Earl","Solar Baron","Lunar Knight","Royal Sage","Noble Wizard","Mystic Mage","Magic Rogue","Enchanted Ranger","Blessed Paladin","Sacred Monk","Ancient Bard","Classic Cleric","Modern Druid","Future Monk","Pirate Beast","Captain Demon","DJ Angel","Astronaut Ghost","Green Spirit","Crown Soul","Shades Heart","Beanie Mind","Headband Force","Ninja Power","Pink Strength","Samurai Wisdom","Dark Grace","Blue Beauty","Party Justice","Purple Truth","Bandana Light","Biker Dark","Rasta Balance","Ghost Harmony","Gold Peace","Galaxy King","Sunglasses Queen","Anchor Lord","Festival Lady","Ocean Prince","Tropical Duke","Night Earl","Red Baron","Orange Knight","Yellow Sage","Green Wizard","Cyan Mage","Magenta Rogue","Silver Ranger","Bronze Paladin","Pearl Monk","Diamond Bard","Emerald Cleric","Ruby Druid","Sapphire Monk","Jade Beast","Marble Demon","Crystal Angel","Thunder Ghost","Lightning Spirit","Storm Soul","Frost Heart","Fire Mind","Shadow Force","Eclipse Power","Nebula Strength","Cosmic Wisdom","Solar Grace","Lunar Beauty","Royal Justice","Noble Truth","Mystic Light","Magic Dark","Enchanted Balance","Blessed Harmony","Sacred Peace","Ancient King","Classic Queen","Modern Lord","Future Lady","Pirate Prince","Captain Duke","DJ Earl","Astronaut Baron","Green Knight","Crown Sage","Shades Wizard","Beanie Mage","Headband Rogue","Ninja Ranger","Pink Paladin","Samurai Monk","Dark Bard","Blue Cleric","Party Druid","Purple Monk","Bandana Beast","Biker Demon","Rasta Angel","Ghost Ghost","Gold Spirit","Galaxy Soul","Sunglasses Heart","Anchor Mind","Festival Force","Ocean Power","Tropical Strength","Night Wisdom","Red Grace","Orange Beauty","Yellow Justice","Green Truth","Cyan Light","Magenta Dark","Silver Balance","Bronze Harmony","Pearl Peace","Diamond King","Emerald Queen","Ruby Lord","Sapphire Lady","Jade Prince","Marble Duke","Crystal Earl","Thunder Baron","Lightning Knight","Storm Sage","Frost Wizard","Fire Mage","Shadow Rogue","Eclipse Ranger","Nebula Paladin","Cosmic Monk","Solar Bard","Lunar Cleric","Royal Druid","Noble Monk","Mystic Beast","Magic Demon","Enchanted Angel","Blessed Ghost","Sacred Spirit","Ancient Soul","Classic Heart","Modern Mind","Future Force","Pirate Power","Captain Strength","DJ Wisdom","Astronaut Grace","Green Beauty","Crown Justice","Shades Truth","Beanie Light","Headband Dark","Ninja Balance","Pink Harmony","Samurai Peace","Dark King","Blue Queen","Party Lord","Purple Lady","Bandana Prince","Biker Duke","Rasta Earl","Ghost Baron","Gold Knight","Galaxy Sage","Sunglasses Wizard","Anchor Mage","Festival Rogue","Ocean Ranger","Tropical Paladin","Night Monk","Red Bard","Orange Cleric","Yellow Druid","Green Monk","Cyan Beast","Magenta Demon","Silver Angel","Bronze Ghost","Pearl Spirit","Diamond Soul","Emerald Heart","Ruby Mind","Sapphire Force","Jade Power","Marble Strength","Crystal Wisdom","Thunder Grace","Lightning Beauty","Storm Justice","Frost Truth","Fire Light","Shadow Dark","Eclipse Balance","Nebula Harmony","Cosmic Peace","Solar King","Lunar Queen","Royal Lord","Noble Lady","Mystic Prince","Magic Duke","Enchanted Earl","Blessed Baron","Sacred Knight","Ancient Sage","Classic Wizard","Modern Mage","Future Rogue"];
+
+const BG_COLORS = [
+  'linear-gradient(135deg, #ff6b35 0%, #f7c59f 100%)',
+  'linear-gradient(135deg, #0a1628 0%, #1a6fd4 100%)',
+  'linear-gradient(135deg, #7c3aed 0%, #a855f7 100%)',
+  'linear-gradient(135deg, #10b981 0%, #34d399 100%)',
+  'linear-gradient(135deg, #ff6b9d 0%, #ff8787 100%)',
+  'linear-gradient(135deg, #ea580c 0%, #fbbf24 100%)',
+  'linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%)',
+  'linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%)',
+  'linear-gradient(135deg, #1e293b 0%, #475569 100%)',
+  'linear-gradient(135deg, #be123c 0%, #f43f5e 100%)',
+  'linear-gradient(135deg, #92400e 0%, #d97706 100%)',
+  'linear-gradient(135deg, #2d3748 0%, #4a5568 100%)',
+  'linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%)',
+  'linear-gradient(135deg, #0c4a6e 0%, #0369a1 100%)',
+  'linear-gradient(135deg, #831843 0%, #db2777 100%)',
+  'linear-gradient(135deg, #5b21b6 0%, #9333ea 100%)',
+  'linear-gradient(135deg, #7c2d12 0%, #ea580c 100%)',
+  'linear-gradient(135deg, #164e63 0%, #06b6d4 100%)',
+  'linear-gradient(135deg, #0d47a1 0%, #1565c0 100%)',
+  'linear-gradient(135deg, #b91c1c 0%, #ef4444 100%)',
+];
+
+const grid = document.getElementById('grid');
+for (let i = 0; i < TOTAL; i++) {
+  const card = document.createElement('div');
+  card.className = 'nft-card';
+  card.style.animationDelay = (i * 0.02) + 's';
+
+  const bg = document.createElement('div');
+  bg.className = 'card-bg';
+  bg.style.background = BG_COLORS[i % BG_COLORS.length];
+  bg.style.backgroundImage = `url('E92DD2E6-5FBE-4F68-B8EA-2491CD873AD0.png')`;
+  bg.style.backgroundSize = 'cover';
+  bg.style.backgroundPosition = 'center';
+
+  const label = document.createElement('div');
+  label.className = 'card-label';
+  label.textContent = `#${i + 1}`;
+  bg.appendChild(label);
+
+  card.appendChild(bg);
+  card.addEventListener('click', () => openModal(i));
+  grid.appendChild(card);
+}
+
+function openModal(id) {
+  const img = document.getElementById('modal-img');
+  img.style.background = BG_COLORS[id % BG_COLORS.length];
+  img.style.backgroundImage = `url('E92DD2E6-5FBE-4F68-B8EA-2491CD873AD0.png')`;
+  img.style.backgroundSize = 'cover';
+  img.style.backgroundPosition = 'center';
+  
+  document.getElementById('modal-name').textContent = `Whalcy #${id + 1} — ${NAMES[id]}`;
+  document.getElementById('modal-overlay').classList.add('open');
+}
+
+document.getElementById('modal-close').onclick = () =>
+  document.getElementById('modal-overlay').classList.remove('open');
+document.getElementById('modal-overlay').addEventListener('click', e => {
+  if (e.target === document.getElementById('modal-overlay'))
+    document.getElementById('modal-overlay').classList.remove('open');
+});
+
+const bc = document.getElementById('bubbles');
+for (let i = 0; i < 15; i++) {
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  const sz = Math.random() * 35 + 8;
+  b.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;
+    animation-duration:${Math.random()*10+6}s;animation-delay:${Math.random()*6}s;`;
+  bc.appendChild(b);
+}
+</script>
+</body>
+</html>
 
